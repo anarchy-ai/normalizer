@@ -29,7 +29,7 @@ A .csv file with 3 columns:
 
 ## Required Libraries
 
-```pip install PyPDF2 python-docx pandas openpyxl pillow pytesseract beautifulsoup4 transformers datasets```
+```pip install PyPDF2 python-docx pandas openpyxl pillow pytesseract beautifulsoup4 transformers datasets fastapi langchain-community```
 
 ## Project Structure
 
@@ -40,6 +40,7 @@ normalizer/
 │   ├── __init__.py
 │   ├── file_ingest.py
 │   ├── prompt_extractor.py
+│   ├── utilities.py
 │   ├── main.py
 │
 ├── app.py
@@ -47,3 +48,18 @@ normalizer/
 ├── README.md
 └── .gitignore
 ```
+
+
+## How to run 
+
+
+1. Install Ollama: Download and install Ollama locally, then run the Llama3 model using the command --> ollama run llama3.
+
+2. Install the dependencies mentioned above.
+
+3. Run Normalizer: Execute the main script using python -m src.main --input_file <input_file> --output_file <output_file>.
+
+Example: 
+python -m src.main --input_file src/Test.docx --output_file src/output.csv
+
+You don't need to create output_file, it will be automatically created.
