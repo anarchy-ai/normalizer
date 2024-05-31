@@ -1,10 +1,15 @@
 import os
+import re
 import PyPDF2
 import docx
 import pandas as pd
 from PIL import Image
 import pytesseract
 from bs4 import BeautifulSoup
+
+# We need to set the tesseract cmd to the exe file for tesseract
+# Instructions for installing tesseract located here: https://github.com/UB-Mannheim/tesseract/wiki
+pytesseract.pytesseract.tesseract_cmd =r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 def read_file(file_path):
     extension = os.path.splitext(file_path)[1].lower()
@@ -26,22 +31,33 @@ def read_file(file_path):
 
 def read_text_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
-        return file.read()
-
+        content = file.read()
+        paragraphs = content.split('\n\n')
+        text = [para.strip() for para in paragraphs if para.strip()]
+        ### DEBUG ONLY ###
+        for para in text:
+            print(para + "\n")
+    
+    return text
 def read_pdf_file(file_path):
-    text = ""
+    text = []
     with open(file_path, 'rb') as file:
-        reader = PyPDF2.PdfFileReader(file)
-        for page_num in range(reader.numPages):
-            text += reader.getPage(page_num).extractText()
+        reader = PyPDF2.PdfReader(file)
+        for page_num in range(len(reader.pages)):
+            page_text = reader.pages[page_num].extract_text()
+            print(page_text)
+            text.append(page_text)
     return text
 
 def read_docx_file(file_path):
     doc = docx.Document(file_path)
     text = []
     for para in doc.paragraphs:
+        ### DEBUG ONLY ###
+        print(para.text + "\n")
+        ##################
         text.append(para.text)
-    return '\n'.join(text)
+    return text
 
 
 def read_spreadsheet(file_path):
@@ -53,8 +69,24 @@ def read_spreadsheet(file_path):
 
 def read_image_file(file_path):
     image = Image.open(file_path)
-    return pytesseract.image_to_string(image)
+    text = pytesseract.image_to_string(image)
+    paragraphs = text.split('\n\n')
+    paragraph_list = [para.strip() for para in paragraphs if para.strip()]
+    return paragraph_list
 
 def read_code_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
-        return file.read()
+        content = file.read()
+    # Normalize newlines
+    content = content.replace('\r\n', '\n').replace('\r', '\n')
+
+    # Split content into blocks based on multiple newlines
+    blocks = content.split('\n\n')
+
+    # Strip leading and trailing whitespace from each block
+    blocks = [block.strip() for block in blocks if block.strip()]
+    for block in blocks:
+        print(block)
+
+    return blocks
+    

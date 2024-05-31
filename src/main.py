@@ -1,8 +1,9 @@
 import argparse
 import os
-from .file_ingest import read_file
-from .prompt_extractor import load_config, init_model, extract_pairs, post_process_response
-from .utilities import save_to_csv
+from file_ingest import read_file
+from prompt_extractor import load_config, init_model, extract_pairs, post_process_response
+from utilities import save_to_csv
+
 
 def main(input_file, output_file):
     model_name = "llama3"
@@ -10,10 +11,14 @@ def main(input_file, output_file):
     
     try:
         content = read_file(input_file)
-        if content:
-            response = extract_pairs(model, content)
-            system_prompt, pairs = post_process_response(response)
-            save_to_csv(system_prompt, pairs, output_file)
+        if content[0]: # Just checking that there is at least one paragraph
+            all_pairs = []  # List to store all prompt-response pairs
+            for text in content:
+                response = extract_pairs(model, text)
+                pairs = post_process_response(response)
+                all_pairs.extend(pairs)
+            # Save all pairs to CSV using the existing save_to_csv function
+            save_to_csv(all_pairs, output_file)  # Passing an empty system_prompt as it is not used
             print(f"Prompt-response pairs extracted and saved to {output_file}")
         else:
             print("No content found in the file.")
