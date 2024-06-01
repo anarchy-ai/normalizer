@@ -30,7 +30,9 @@ A .csv file with 3 columns:
 ## Required Libraries
 
 ```pip install PyPDF2 python-docx pandas openpyxl pillow pytesseract beautifulsoup4 transformers datasets fastapi langchain-community```
+<br>
 **Please note that tesseract is required to process image files**
+<br>
 Instructions on how to install tesseract can be located [here](https://github.com/UB-Mannheim/tesseract/wiki). For the time being, this functionality only works on **Windows**.
 
 ## Project Structure
