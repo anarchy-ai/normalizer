@@ -10,7 +10,9 @@ def init_model(model_name):
 
 def generate_prompt(context):
     prompt = (
-        "You are a highly accurate text extraction system which will extract questions and answers from completely unstructured data. Your task is to extract the user prompts, and corresponding responses from the given context. Ensure the extracted data follows the exact format given below:\n\n"
+        "You are a highly accurate text extraction system which will extract questions and answers from completely unstructured data. Your task is to extract user prompts, and corresponding responses from the given unstructured context.\n"
+        "When processing statistical values from spreadsheets, ensure that you include all details about the data provided to you in a single question (ex: What is the datatype of the integers column in test_data.csv: int64, or 'what is the mean of the prices column in shopping.csv: 60.54).\n"
+        "Ensure the extracted data follows the exact format given below:\n\n"
         "Format:\n"
         "User Prompt: [question]\n"
         "Response: [response]\n\n"
